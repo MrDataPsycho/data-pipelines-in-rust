@@ -66,8 +66,28 @@ fn create_arbitary_ration_df(df: &DataFrame){
     println!("{}", _df.head(Some(10)))
 }
 
+fn get_up_sampled_df(df: &DataFrame) -> DataFrame {
+    let _df = df.sample_n(100000000, true, false, Some(1)).unwrap();
+    info!("random sample created with size {:?}!", _df.height());
+    _df
+}
 
-    
+fn aggregate_features_df(df: &DataFrame) -> DataFrame{
+    let _df = df.groupby(["class_label"])
+    .unwrap()
+    .agg(&[
+        ("proline", &["mean"]),
+        ("proline", &["median"]),
+        ("hue", &["mean"]),
+        ("hue", &["median"]),
+        ("flavanoids", &["mean"]),
+        ("flavanoids", &["median"]),
+        ])
+    .unwrap();
+    info!("Aggregated result:");
+    println!("{}", _df);
+    _df
+}
 
 fn main() {
     env_logger::init();
@@ -80,6 +100,8 @@ fn main() {
             describe_top_features(&wine_df);
             get_proline_agg_df(&wine_df);
             create_arbitary_ration_df(&wine_df);
+            get_up_sampled_df(&wine_df);
+            aggregate_features_df(&wine_df);
         },  // println!("{:?}", content.head(Some(10)))
         Err(error) => panic!("Problem reading file: {:?}", error),
     }

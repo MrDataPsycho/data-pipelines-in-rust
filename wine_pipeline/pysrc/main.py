@@ -72,7 +72,7 @@ def create_arbitary_ration_df(df: pd.DataFrame):
     logging.info("Ration data frame is Ceated")
     print(_df.head())
 
-def get_up_sampled_df(df: pd.DataFrame, size=100):
+def get_up_sampled_df(df: pd.DataFrame, size=100) -> pd.DataFrame:
     _df = df.sample(size, replace=True, random_state=1)
     logging.info(f"random sample created with size {len(_df)}!")
     return _df
