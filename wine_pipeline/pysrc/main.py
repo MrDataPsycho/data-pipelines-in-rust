@@ -5,7 +5,7 @@ import time
 
 
 pd.set_option('display.max_rows', 500)
-logging.basicConfig(format='=== %(asctime)s::%(name)s::%(levelname)s:: %(message)s', level=logging.INFO)
+logging.basicConfig(format='[%(asctime)s %(name)s %(levelname)s] %(message)s', level=logging.INFO)
 
 DATASTORE = Path(Path.cwd()).joinpath("datastore")
 
@@ -27,7 +27,7 @@ def read_csv_into_df(path: Path, filename: str) -> pd.DataFrame:
     ]
     columns = [item.lower().replace(" ", "_") for item in columns]
     _df.columns = columns
-    print(columns)
+    logging.info("Data read successfully!")
     return _df
 
 def describe_top_features(df: pd.DataFrame) -> None:
@@ -40,25 +40,21 @@ def describe_top_features(df: pd.DataFrame) -> None:
         "alcohol"
     ]
     result = df[top_feature_list].describe()
-    logging.info("Basic Statistics")
-    print(result)
+    logging.info("Basic Statistics calculated.")
     total_groups = df["class_label"].unique().tolist()
-    logging.info(f"Class Labels {total_groups}")
 
 
 def get_proline_agg_df(df: pd.DataFrame):
     group_colname = "class_label"
     features = ["class_label", "proline"]
-    feature_agg_max = df[features].groupby(group_colname).max().reset_index().rename(columns={"proline": "max_proline"})
-    feature_agg_min = df[features].groupby(group_colname).min().reset_index().rename(columns={"proline": "min_proline"})
-    feature_agg_median = df[features].groupby(group_colname).median().reset_index().rename(columns={"proline": "median_proline"})
-    _df = (
-        feature_agg_min
-        .merge(feature_agg_median, on="class_label")
-        .merge(feature_agg_max, on="class_label")
+
+    _df = df[features].groupby(group_colname).agg(
+        max_proline=("proline", "max"),
+        median_proline=("proline", "median"),
+        min_proline=("proline", "mean"),
     )
-    logging.info("Mean Max Distribution of Proline")
-    print(_df)
+    logging.info("Mean Max Distribution of Proline calculated.")
+    # print(_df)
 
 
 def create_arbitary_ration_df(df: pd.DataFrame):
@@ -70,7 +66,7 @@ def create_arbitary_ration_df(df: pd.DataFrame):
     )
     _df = pd.DataFrame(data=data)
     logging.info("Ration data frame is Ceated")
-    print(_df.head())
+    # print(_df.head())
 
 def get_up_sampled_df(df: pd.DataFrame, size=100) -> pd.DataFrame:
     _df = df.sample(size, replace=True, random_state=1)
@@ -90,11 +86,10 @@ def aggregate_features_df(df: pd.DataFrame) -> pd.DataFrame:
         )
     _df = df.groupby(groups).agg(**agg_map).reset_index().sort_values(groups)
     logging.info("Aggregated result:")
-    print(_df)
+    # print(_df)
     return _df
 
     
-
 
 def main():
     wine_df = read_csv_into_df(DATASTORE, "wine.data")
@@ -102,7 +97,7 @@ def main():
     get_proline_agg_df(wine_df)
     create_arbitary_ration_df(wine_df)
     aggregate_features_df(wine_df)
-    wine_up_sampled_df = get_up_sampled_df(wine_df, 100000000)
+    wine_up_sampled_df = get_up_sampled_df(wine_df, 50000000)
     aggregate_features_df(wine_up_sampled_df)
 
 
