@@ -50,14 +50,14 @@ fn get_proline_agg_df(df: &DataFrame){
 }
 
 
-fn create_arbitary_ration_df(df: &DataFrame){
-    let selection_list = [
-        "class_label", "proline", "alcohol", "flavanoids", 
-        "color_intensity", "od280/od315_of_diluted_wines", "hue"
-    ];
-    let mut _df = df.select(selection_list).unwrap();
-    _df.with_column(["proline", _df.column("")]);
-}
+// fn create_arbitary_ration_df(df: &DataFrame){
+//     let selection_list = [
+//         "class_label", "proline", "alcohol", "flavanoids", 
+//         "color_intensity", "od280/od315_of_diluted_wines", "hue"
+//     ];
+//     let mut _df = df.select(selection_list).unwrap();
+//     _df.with_column(["proline", _df.column("")]);
+// }
 
 
     
