@@ -1,6 +1,7 @@
 from pathlib import Path
 import pandas as pd
 import logging
+import time
 
 
 pd.set_option('display.max_rows', 500)
@@ -26,6 +27,7 @@ def read_csv_into_df(path: Path, filename: str) -> pd.DataFrame:
     ]
     columns = [item.lower().replace(" ", "_") for item in columns]
     _df.columns = columns
+    print(columns)
     return _df
 
 def describe_top_features(df: pd.DataFrame) -> None:
@@ -70,9 +72,45 @@ def create_arbitary_ration_df(df: pd.DataFrame):
     logging.info("Ration data frame is Ceated")
     print(_df.head())
 
+def get_up_sampled_df(df: pd.DataFrame, size=100):
+    _df = df.sample(size, replace=True, random_state=1)
+    logging.info(f"random sample created with size {len(_df)}!")
+    return _df
 
-if __name__ == "__main__":
+
+def aggregate_features_df(df: pd.DataFrame) -> pd.DataFrame:
+    groups = ["class_label"]
+    agg_map = dict(
+            mean_proline=("proline", "mean"),
+            median_proline=("proline", "median"),
+            mean_hue=("hue", "mean"),
+            median_hue=("hue", "median"),
+            mean_flavanoids=("flavanoids", "mean"),
+            median_flavanoids=("flavanoids", "median"),
+        )
+    _df = df.groupby(groups).agg(**agg_map).reset_index().sort_values(groups)
+    logging.info("Aggregated result:")
+    print(_df)
+    return _df
+
+    
+
+
+def main():
     wine_df = read_csv_into_df(DATASTORE, "wine.data")
     describe_top_features(wine_df)
     get_proline_agg_df(wine_df)
     create_arbitary_ration_df(wine_df)
+    aggregate_features_df(wine_df)
+    wine_up_sampled_df = get_up_sampled_df(wine_df, 100000000)
+    aggregate_features_df(wine_up_sampled_df)
+
+
+if __name__ == "__main__":
+    st = time.process_time()
+    main()
+    et = time.process_time()
+    res = et - st
+    logging.info("Program executed successfully!")
+    logging.info(f'CPU Execution time: {res} seconds.')
+    
