@@ -49,15 +49,22 @@ fn get_proline_agg_df(df: &DataFrame){
     println!("{}", _df)
 }
 
+fn create_ration(col1: &str, col2: &str, df: &DataFrame, new_series_name: &str) -> Series{
+    let series1 = df.column(col1).unwrap().clone();
+    let series2 = df.column(col2).unwrap().clone();
+    Series::new(new_series_name, &series1/&series2)
+}
 
-// fn create_arbitary_ration_df(df: &DataFrame){
-//     let selection_list = [
-//         "class_label", "proline", "alcohol", "flavanoids", 
-//         "color_intensity", "od280/od315_of_diluted_wines", "hue"
-//     ];
-//     let mut _df = df.select(selection_list).unwrap();
-//     _df.with_column(["proline", _df.column("")]);
-// }
+fn create_arbitary_ration_df(df: &DataFrame){
+    let par = create_ration("proline", "alcohol", df, "proline_alcohol_ration");
+    let fcr = create_ration("flavanoids", "color_intensity", df, "flavanoids_color_ration");
+    let ohr = create_ration("od280/od315_of_diluted_wines", "hue", df, "od_hue_ration");
+    let class_label = df.column("class_label").unwrap().clone();
+    let _df = DataFrame::new(vec![class_label, par, fcr, ohr]).unwrap();
+    // let mut _df = _df.with_column(par).unwrap();
+    info!("Ration data frame is Ceated");
+    println!("{}", _df.head(Some(10)))
+}
 
 
     
@@ -72,6 +79,7 @@ fn main() {
         Ok(wine_df) => {
             describe_top_features(&wine_df);
             get_proline_agg_df(&wine_df);
+            create_arbitary_ration_df(&wine_df);
         },  // println!("{:?}", content.head(Some(10)))
         Err(error) => panic!("Problem reading file: {:?}", error),
     }
