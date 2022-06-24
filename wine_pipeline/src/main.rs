@@ -100,9 +100,9 @@ fn main() {
             describe_top_features(&wine_df);
             get_proline_agg_df(&wine_df);
             create_arbitary_ration_df(&wine_df);
-            get_up_sampled_df(&wine_df);
-            aggregate_features_df(&wine_df);
-        },  // println!("{:?}", content.head(Some(10)))
+            let wine_up_sampled_df = get_up_sampled_df(&wine_df);
+            aggregate_features_df(&wine_up_sampled_df);
+        },
         Err(error) => panic!("Problem reading file: {:?}", error),
     }
     let duration = start.elapsed();
