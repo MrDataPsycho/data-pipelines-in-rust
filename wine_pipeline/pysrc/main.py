@@ -65,12 +65,12 @@ def create_arbitary_ration_df(df: pd.DataFrame):
         od_hue_ration=df["od280/od315_of_diluted_wines"]/df["hue"],
     )
     _df = pd.DataFrame(data=data)
-    logging.info("Ration data frame is Ceated")
+    logging.info("Ration data frame is Ceated.")
     # print(_df.head())
 
 def get_up_sampled_df(df: pd.DataFrame, size=100) -> pd.DataFrame:
     _df = df.sample(size, replace=True, random_state=1)
-    logging.info(f"random sample created with size {len(_df)}!")
+    logging.info(f"Random sample created with size {len(_df)}!")
     return _df
 
 
@@ -85,7 +85,7 @@ def aggregate_features_df(df: pd.DataFrame) -> pd.DataFrame:
             median_flavanoids=("flavanoids", "median"),
         )
     _df = df.groupby(groups).agg(**agg_map).reset_index().sort_values(groups)
-    logging.info("Aggregated result:")
+    logging.info("Aggregated result calculated.")
     # print(_df)
     return _df
 
@@ -106,6 +106,6 @@ if __name__ == "__main__":
     main()
     et = time.process_time()
     res = et - st
-    logging.info("Program executed successfully!")
-    logging.info(f'CPU Execution time: {res} seconds.')
+    logging.info("Pipeline executed successfully!")
+    logging.info(f'CPU Execution time: {res}s.')
     

@@ -35,7 +35,7 @@ fn describe_top_features(df: &DataFrame){
         "alcohol"
     ];
     let _df = df.select(top_feature_vec).unwrap();
-    info!("Basic Statistics calculated");
+    info!("Basic Statistics calculated.");
     // println!("{}", &_df.describe(None));
 }
 
@@ -46,7 +46,7 @@ fn get_proline_agg_df(df: &DataFrame){
         .unwrap()
         .agg(&[("proline", &["mean", "median", "max"])])
         .unwrap();
-    info!("Mean Max Distribution of Proline");
+    info!("Mean Max Distribution of Proline calculated.");
     // println!("{}", _df)
 }
 
@@ -63,13 +63,13 @@ fn create_arbitary_ration_df(df: &DataFrame){
     let class_label = df.column("class_label").unwrap().clone();
     let _df = DataFrame::new(vec![class_label, par, fcr, ohr]).unwrap();
     // let mut _df = _df.with_column(par).unwrap();
-    info!("Ration data frame is Ceated");
+    info!("Ration data frame is Ceated.");
     // println!("{}", _df.head(Some(10)))
 }
 
 fn get_up_sampled_df(df: &DataFrame, size: usize) -> DataFrame {
     let _df = df.sample_n(size, true, false, Some(1)).unwrap();
-    info!("random sample created with size {:?}!", _df.height());
+    info!("Random sample created with size {:?}!", _df.height());
     _df
 }
 
@@ -85,7 +85,7 @@ fn aggregate_features_df(df: &DataFrame) -> DataFrame{
         ("flavanoids", &["median"]),
         ])
     .unwrap();
-    info!("Aggregated result calculated");
+    info!("Aggregated result calculated.");
     // println!("{}", _df);
     _df
 }
@@ -107,6 +107,6 @@ fn main() {
         Err(error) => panic!("Problem reading file: {:?}", error),
     }
     let duration = start.elapsed();
-    info!("Time elapsed in execution is: {:?}", duration);
-    info!("Time elapsed in execution (seconds) is: {:?}", duration.as_secs());
+    info!{"Pipeline executed successfully!"}
+    info!("CPU Execution time: {:?}", duration);
 }
