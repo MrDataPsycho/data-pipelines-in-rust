@@ -18,3 +18,12 @@ async fn main() -> datafusion::error::Result<()> {
     df.show().await?;
     Ok(())
 }
+
+
+// let schema = Arc::new(Schema::new(vec![
+//     Field::new("asin", DataType::Utf8, false),
+//     Field::new("vote", DataType::Int32, true),
+//     Field::new("verified", DataType::Boolean, false),
+//     Field::new("unixReviewTime", DataType::Timestamp(TimeUnit::Millisecond, None), false),
+//     Field::new("reviewText", DataType::UInt8, true),
+// ]));
