@@ -1,5 +1,5 @@
 use std::ops::Add;
-
+// use chrono::prelude::*;
 use datafusion::prelude::*;
 
 #[tokio::main]
@@ -19,7 +19,7 @@ async fn main() -> datafusion::error::Result<()> {
     Ok(())
 }
 
-
+// use datafusion::arrow::datatypes::{DataType, Field, Schema, TimeUnit};
 // let schema = Arc::new(Schema::new(vec![
 //     Field::new("asin", DataType::Utf8, false),
 //     Field::new("vote", DataType::Int32, true),
@@ -27,3 +27,14 @@ async fn main() -> datafusion::error::Result<()> {
 //     Field::new("unixReviewTime", DataType::Timestamp(TimeUnit::Millisecond, None), false),
 //     Field::new("reviewText", DataType::UInt8, true),
 // ]));
+
+
+// fn get_date_time(){
+//     let timestamp:i64 = 1381017600;
+//     let naive = NaiveDateTime::from_timestamp(timestamp, 0);
+//     info!("Data read successfully!");
+//     info!("Year: {}", naive.year());
+//     info!("Month: {}", naive.month());
+//     info!("Day: {}", naive.day());
+//     // println!("{}", naive);
+// }

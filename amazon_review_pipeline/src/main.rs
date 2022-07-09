@@ -1,10 +1,8 @@
 use std::sync::Arc;
-// use arrow::ipc::DateUnit;
 use datafusion::prelude::*;
 use datafusion::logical_plan::to_timestamp_seconds;
 use datafusion::prelude::date_part;
 use datafusion::scalar::ScalarValue;
-// use chrono::prelude::*;
 use log::info;
 use env_logger;
 
@@ -43,13 +41,3 @@ async fn read_data(path: String) -> datafusion::error::Result<Arc<DataFrame>> {
     Ok(df_)
 }
 
-
-// fn get_date_time(){
-//     let timestamp:i64 = 1381017600;
-//     let naive = NaiveDateTime::from_timestamp(timestamp, 0);
-//     info!("Data read successfully!");
-//     info!("Year: {}", naive.year());
-//     info!("Month: {}", naive.month());
-//     info!("Day: {}", naive.day());
-//     // println!("{}", naive);
-// }
