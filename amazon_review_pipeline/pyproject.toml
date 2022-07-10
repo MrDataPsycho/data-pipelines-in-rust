@@ -8,6 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.8"
 pyspark = "^3.3.0"
+python-dotenv = "^0.20.0"
 
 [tool.poetry.dev-dependencies]
 

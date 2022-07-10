@@ -22,11 +22,12 @@ async fn main() -> datafusion::error::Result<()> {
     insights_df
         .write_csv("datalayers/insights/toys_n_game")
         .await?;
+    info!("Data Written successfully in analytics layer!");
     // processed_df.limit(None, Some(4))?.show().await?;
-    // insights_df.limit(None, Some(4))?.show().await?;let duration = start.elapsed();
+    // insights_df.limit(None, Some(4))?.show().await?;
     let duration = start.elapsed();
     info!{"Pipeline executed successfully!"}
-    info!("CPU Execution time: {:?}", duration);
+    info!("Pipeline Execution time: {:?}", duration);
     Ok(())
 }
 
@@ -89,9 +90,9 @@ async fn add_processed_columns(df: &Arc<DataFrame>) -> datafusion::error::Result
         col("reviewed_year"),
         col("reviewed_month"),
     ];
-    let _df = df.select(selected_col);
+    let _df = df.select(selected_col)?;
     info!("Plan for processed layer created successfully!");
-    _df
+    _df.repartition(Partitioning::RoundRobinBatch(20))
 }
 
 async fn prepare_aggregated_insights(
@@ -99,17 +100,17 @@ async fn prepare_aggregated_insights(
 ) -> datafusion::error::Result<Arc<DataFrame>> {
     let _df = df
         .filter(col("review_text_len").gt(lit(0)))?
-        .sort(vec![
-            col("reviewed_year").sort(true, false),
-            col("reviewed_month").sort(true, false),
-        ])?
         .aggregate(
             vec![col("asin"), col("reviewed_year"), col("reviewed_month")],
             vec![
                 count(col("asin")).alias("total_review"),
                 // sum(col("vote")).alias("total_vote"),
             ],
-        )?;
+        )?
+        .sort(vec![
+            col("reviewed_year").sort(true, false),
+            col("reviewed_month").sort(true, false),
+        ])?;
     info!("Plan for Aggregate Layer created successfully!");
-    _df.repartition(Partitioning::Hash(vec![col("reviewed_year")], 8))
+    _df.repartition(Partitioning::Hash(vec![col("reviewed_year")], 12))
 }

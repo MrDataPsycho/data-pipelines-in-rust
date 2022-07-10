@@ -4,4 +4,6 @@ run_rust_release:
 	RUST_LOG=info ./target/release/amazon_review_pipeline
 clean_dirs:
 	rm -rf datalayers/insights/toys_n_game/ && rm -rf datalayers/analytics/toys_n_game/
+run_pyspark_release:
+	poetry run python pysrc/main.py
 	

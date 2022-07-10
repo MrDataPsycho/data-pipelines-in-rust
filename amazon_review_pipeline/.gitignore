@@ -2,3 +2,7 @@
 .vscode
 /datalayers/**/*.json
 /datalayers/**/*.csv
+/datalayers/**/.part*
+datalayers/**/part*
+datalayers/**/_SUCCESS
+datalayers/**/._SUCCESS*
