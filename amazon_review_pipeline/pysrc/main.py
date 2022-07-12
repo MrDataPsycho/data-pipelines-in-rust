@@ -7,7 +7,7 @@ import pyspark.sql.functions as fn
 from pyspark.sql.functions import col
 from dotenv import load_dotenv
 
-logging.basicConfig(format='[%(asctime)s amazon_review_pipeline %(levelname)s] %(message)s', level=logging.INFO)
+logging.basicConfig(format='[%(asctime)s  %(levelname)s amazon_review_pipeline] %(message)s', level=logging.INFO)
 
 def create_spark_session():
     """Create a Spark Session"""

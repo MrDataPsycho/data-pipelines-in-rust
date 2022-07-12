@@ -13,8 +13,9 @@ async fn main() -> datafusion::error::Result<()> {
     let file_path = "datalayers/landing/Toys_and_Games_5.json";
     // let file_path = "datalayers/landing/test_file.json";
     let df = read_data(file_path.to_string()).await?;
-    let processed_df = add_processed_columns(&df).await?;
-    let insights_df = prepare_aggregated_insights(&processed_df).await?;
+    let df_added_ymrl = add_year_month_review_len(&df).await?;
+    let processed_df = add_processed_columns(&df_added_ymrl).await?;
+    let insights_df = prepare_aggregated_insights(&df_added_ymrl).await?;
     processed_df
         .write_csv("datalayers/analytics/toys_n_game")
         .await?;
@@ -43,7 +44,11 @@ async fn read_data(path: String) -> datafusion::error::Result<Arc<DataFrame>> {
     ];
     let df_ = ctx.read_json(path, NdJsonReadOptions::default()).await?;
     let df_ = df_.select_columns(&selected_columns)?;
+    info!("Data loading plan created successfully!");
+    Ok(df_)
+}
 
+async fn add_year_month_review_len(df: &Arc<DataFrame>) -> datafusion::error::Result<Arc<DataFrame>> {
     let processed_columns = vec![
         col("asin"),
         coalesce(vec![col("vote"), lit("0")]).alias("vote"),
@@ -55,9 +60,9 @@ async fn read_data(path: String) -> datafusion::error::Result<Arc<DataFrame>> {
         date_part(lit("month"), to_timestamp_seconds(col("unixReviewTime")))
             .alias("reviewed_month"),
     ];
-    let df_ = df_.select(processed_columns)?;
-    info!("Data loading plan created successfully!");
-    Ok(df_)
+    let df_ = df.select(processed_columns);
+    info!("Year month lenght column added plan created successfully!");
+    df_
 }
 
 async fn add_processed_columns(df: &Arc<DataFrame>) -> datafusion::error::Result<Arc<DataFrame>> {
