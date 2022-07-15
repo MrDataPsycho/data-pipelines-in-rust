@@ -56,9 +56,14 @@ async fn add_year_month_review_len(df: &Arc<DataFrame>) -> datafusion::error::Re
         to_timestamp_seconds(col("unixReviewTime")).alias("reviewed_at"),
         coalesce(vec![col("reviewText"), lit("")]).alias("review_text"),
         length(coalesce(vec![col("reviewText"), lit("")])).alias("review_text_len"),
-        date_part(lit("year"), to_timestamp_seconds(col("unixReviewTime"))).alias("reviewed_year"),
-        date_part(lit("month"), to_timestamp_seconds(col("unixReviewTime")))
-            .alias("reviewed_month"),
+        date_part(
+            lit("year"), 
+            to_timestamp_seconds(col("unixReviewTime"))
+        ).alias("reviewed_year"),
+        date_part(
+            lit("month"),
+            to_timestamp_seconds(col("unixReviewTime"))
+        ).alias("reviewed_month"),
     ];
     let df_ = df.select(processed_columns);
     info!("Year month lenght column added plan created successfully!");
