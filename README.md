@@ -16,4 +16,5 @@ Each directory in the root is a separate data pipeline. Inside of the directory 
 If you want to add more data pipeline or some complex pipeline helpful for others feel free to fork and send a pr request. **But only condition are you pipeline must be written in Polars or other Rust dataframe framework. Do not use python binding for Polars, it is about democratizing Rust over Python**
 
 ## Pipelines:
-- `wine_pipeline` is a small data pipeline written for the famous wine data which as three different class of wine and other measurements as feature variable. The data set is quite popular in ML community.
+- `wine_pipeline` is a small data pipeline written for the famous wine data which as three different class of wine and other measurements as feature variable. The data set is quite popular in ML community. The data pipeline is written on Polars and Pandas
+- `Amazon Review Pipeline` is a data pipeline based on Amazon Games and Toys product review data. There is more than 800+ MB of data. Each record in the json data is a product review. The pipeline is written on DataFusion and Pyspark.
