@@ -43,3 +43,6 @@ RUST_LOG=info ./target/release/amazon_review_pipeline
 [2022-07-13T23:22:12Z INFO  amazon_review_pipeline] Pipeline executed successfully!
 [2022-07-13T23:22:12Z INFO  amazon_review_pipeline] Pipeline Execution time: 20.104681726s
 ```
+
+## Setup Configuration:
+The cpu is used to run the pipelines is intel core i7, 8th Gen with 16 GB RAM on Linux Mint OS.
