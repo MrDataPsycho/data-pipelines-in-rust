@@ -13,31 +13,30 @@ The following transformation is demonestrated in the data pipeline:
 ## Peformance Logs:
 Logs for Polars:
 ```
-datapsycho@dataops:~/.../wine_pipeline$ make run_python 
-poetry run python pysrc/main.py
-[2022-06-25 07:32:38,737 root INFO] Data read successfully!
-[2022-06-25 07:32:38,749 root INFO] Basic Statistics calculated.
-[2022-06-25 07:32:38,755 root INFO] Mean Max Distribution of Proline calculated.
-[2022-06-25 07:32:38,755 root INFO] Ration data frame is Ceated.
-[2022-06-25 07:32:38,766 root INFO] Aggregated result calculated.
-[2022-06-25 07:32:40,464 root INFO] Random sample created with size 50000000!
-[2022-06-25 07:32:43,934 root INFO] Aggregated result calculated.
-[2022-06-25 07:32:43,947 root INFO] Pipeline executed successfully!
-[2022-06-25 07:32:43,947 root INFO] CPU Execution time: 5.2120559360000005s.
+datapsycho@dataops:~/.../wine_pipeline$ make run_rust_release 
+RUST_LOG=info ./target/release/wine_pipeline
+[2022-07-15T23:23:45Z INFO  wine_pipeline] Data read successfully!
+[2022-07-15T23:23:45Z INFO  wine_pipeline] Basic Statistics calculated.
+[2022-07-15T23:23:45Z INFO  wine_pipeline] Mean Max Distribution of Proline calculated.
+[2022-07-15T23:23:45Z INFO  wine_pipeline] Ration data frame is Ceated.
+[2022-07-15T23:23:46Z INFO  wine_pipeline] Random sample created with size 50000000!
+[2022-07-15T23:23:48Z INFO  wine_pipeline] Aggregated result calculated.
+[2022-07-15T23:23:48Z INFO  wine_pipeline] Pipeline executed successfully!
+[2022-07-15T23:23:48Z INFO  wine_pipeline] CPU Execution time: 3.18567858s
 ```
 
 Logs for Pandas:
 ```
-datapsycho@dataops:~/.../wine_pipeline$ poetry run python pysrc/main.py 
-[2022-06-25 07:30:49,166 root INFO] Data read successfully!
-[2022-06-25 07:30:49,176 root INFO] Basic Statistics calculated.
-[2022-06-25 07:30:49,181 root INFO] Mean Max Distribution of Proline calculated.
-[2022-06-25 07:30:49,181 root INFO] Ration data frame is Ceated.
-[2022-06-25 07:30:49,186 root INFO] Aggregated result calculated.
-[2022-06-25 07:30:50,873 root INFO] Random sample created with size 50000000!
-[2022-06-25 07:30:54,290 root INFO] Aggregated result calculated.
-[2022-06-25 07:30:54,302 root INFO] Pipeline executed successfully!
-[2022-06-25 07:30:54,302 root INFO] CPU Execution time: 5.1388861630000005s.
+datapsycho@dataops:~/.../wine_pipeline$ poetry run python pysrc/main.py
+[2022-07-16 01:30:58,307 root INFO] Data read successfully!
+[2022-07-16 01:30:58,318 root INFO] Basic Statistics calculated.
+[2022-07-16 01:30:58,325 root INFO] Mean Max Distribution of Proline calculated.
+[2022-07-16 01:30:58,326 root INFO] Ration data frame is Ceated.
+[2022-07-16 01:30:58,331 root INFO] Aggregated result calculated.
+[2022-07-16 01:31:00,105 root INFO] Random sample created with size 50000000!
+[2022-07-16 01:31:04,155 root INFO] Aggregated result calculated.
+[2022-07-16 01:31:04,165 root INFO] Pipeline executed successfully!
+[2022-07-16 01:31:04,165 root INFO] CPU Execution time: 5.838280569s.
 ```
 
 Which shows by using Polars in Rust you can decrease the cpu time by more than 50%.

@@ -1,6 +1,6 @@
-# Data Pipeline in Rust (Polars DataFrame)
+# Data Pipeline in Rust
 
-The repository contains, data pipeline code written in Rust (Polars) and Python (Pandas). The main intend was to write data pipelin in Rust instead of python. But to compare the cpu time peformance gain the same pipeline is also writen in Pandas. 
+The repository contains, data pipeline code written in Rust (Polars/DataFusion) and Python (Pandas/Modin/Dask/PySpark). The main intend was to write data pipelin in Rust instead of python. But to compare the cpu time peformance gain the same pipeline is also writen using Python frameworks. 
 
 Each directory in the project is a separate data pipeline. The smaller datasets are included along with the pipeline and only if it has free to use license. If the data set is big there will be a bash script added into the `datastore` directory of the particular project to download the data.
 
