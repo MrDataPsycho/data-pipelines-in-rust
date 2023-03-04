@@ -1,0 +1,29 @@
+schema: '2.0'
+stages:
+  build_preprocessing_bin:
+    cmd: cargo build --release --bin preprocess
+    deps:
+    - path: Cargo.toml
+      md5: 2c0be3076e4f03af7ff0e3e75e54043d
+      size: 651
+    - path: src/bin/stages/preprocess.rs
+      md5: 9e743b10567fa648e57785559b407a98
+      size: 3233
+    outs:
+    - path: target/release/preprocess
+      md5: e24732439c7fac7a3a76fa2d48630a93
+      size: 20405288
+      isexec: true
+  preprocess:
+    cmd: RUST_LOG=info target/release/preprocess
+    deps:
+    - path: data/raw/diabetes.csv
+      md5: b43dd020fa775d93fced49f959c227ed
+      size: 23873
+    - path: target/release/preprocess
+      md5: e24732439c7fac7a3a76fa2d48630a93
+      size: 20405288
+    outs:
+    - path: data/processed/diabetes.csv
+      md5: b612715ce17472f209750fa739cb773d
+      size: 10046

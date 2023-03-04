@@ -6,3 +6,4 @@
 datalayers/**/part*
 datalayers/**/_SUCCESS
 datalayers/**/._SUCCESS*
+datalayers/**/*.gz

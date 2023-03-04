@@ -1,0 +1,15 @@
+stages:
+  build_preprocessing_bin:
+    cmd: cargo build --release --bin preprocess
+    deps:
+      - src/bin/stages/preprocess.rs
+      - Cargo.toml
+    outs:
+      - target/release/preprocess
+  preprocess:
+    cmd: RUST_LOG=info target/release/preprocess
+    deps:
+      - data/raw/diabetes.csv
+      - target/release/preprocess
+    outs:
+      - data/processed/diabetes.csv
