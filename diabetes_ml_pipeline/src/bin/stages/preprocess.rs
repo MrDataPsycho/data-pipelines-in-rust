@@ -78,16 +78,6 @@ fn apply_imputation(df: DataFrame) -> DataFrame {
     df
 }
 
-// fn apply_filter(df: DataFrame) -> DataFrame{
-//     let result = df.lazy()
-//         .filter(col("Pregnancies").is_not_null())
-//         .filter(col("Outcome").is_not_null())
-//         .collect()
-//         .unwrap();
-//     info!("Any non-null value is removed from the data set by pregnancies, outcome columns.");
-//     result
-// }
-
 fn run_pipeline(df: DataFrame) {
     let write_path = "data/processed/diabetes.csv";
     let mut file = std::fs::File::create(write_path).unwrap();
