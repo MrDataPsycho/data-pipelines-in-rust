@@ -1,7 +1,6 @@
-use polars::{prelude::*};
-use log::info;
 use env_logger;
-
+use log::info;
+use polars::prelude::*;
 
 fn main() {
     env_logger::init();
@@ -9,15 +8,15 @@ fn main() {
     run_pipeline(df);
 }
 
-
-fn read_diabetes_dataset() -> DataFrame{
+fn read_diabetes_dataset() -> DataFrame {
     let path = "data/raw/diabetes.csv";
-    let df = LazyCsvReader::new(path.to_string()).finish().expect("Can not rea the Data.");
+    let df = LazyCsvReader::new(path.to_string())
+        .finish()
+        .expect("Can not rea the Data.");
     info!("Here is a glimps of the data!");
     println!("{:?}", df.clone().limit(3).collect());
     df.collect().unwrap()
 }
-
 
 fn filter_zero_values(df: DataFrame) -> DataFrame {
     let result = df
@@ -29,8 +28,7 @@ fn filter_zero_values(df: DataFrame) -> DataFrame {
         .filter(col("Insulin").gt(0))
         .filter(col("BMI").gt(0))
         .filter(col("Age").gt(0))
-        .filter(col("*").is_not_null())
-        ;
+        .filter(col("*").is_not_null());
     info!("Filters zero applied to lazy frame!");
     result.collect().unwrap()
 }
@@ -38,20 +36,20 @@ fn filter_zero_values(df: DataFrame) -> DataFrame {
 fn select_relevant_columns(df: DataFrame) -> DataFrame {
     let col_list = [
         "Pregnancies",
-        "Glucose", 
-        "BloodPressure", 
-        "SkinThickness", 
-        "Insulin", 
-        "BMI", 
+        "Glucose",
+        "BloodPressure",
+        "SkinThickness",
+        "Insulin",
+        "BMI",
         "Age",
-        "Outcome"
+        "Outcome",
     ];
     info!("Only relevant columns are selected!");
     df.select(col_list).unwrap()
 }
 
 fn impute_zero_with_mean(df: DataFrame, col_name: &str) -> DataFrame {
-    let musk = df.column(col_name).unwrap().gt(0).unwrap(); 
+    let musk = df.column(col_name).unwrap().gt(0).unwrap();
     let col_mean = df
         .column(col_name)
         .unwrap()
@@ -60,7 +58,6 @@ fn impute_zero_with_mean(df: DataFrame, col_name: &str) -> DataFrame {
         .mean()
         .unwrap();
 
-
     let predicate = when(col(col_name).lt_eq(0.0))
         .then(lit(col_mean))
         .otherwise(col(col_name))
@@ -68,7 +65,6 @@ fn impute_zero_with_mean(df: DataFrame, col_name: &str) -> DataFrame {
     let result = df.lazy().with_column(predicate);
     info!("Imputed zero value for column {}", col_name);
     result.collect().unwrap()
-
 }
 
 fn apply_imputation(df: DataFrame) -> DataFrame {
@@ -96,7 +92,7 @@ fn run_pipeline(df: DataFrame) {
     let write_path = "data/processed/diabetes.csv";
     let mut file = std::fs::File::create(write_path).unwrap();
     info!("Row count before processing. {:?}", df.shape());
-    let  df = select_relevant_columns(df);
+    let df = select_relevant_columns(df);
     let df = apply_imputation(df);
     // let df = apply_filter(df);
     // info!("Here is a glimps of the data!");
@@ -109,21 +105,3 @@ fn run_pipeline(df: DataFrame) {
     CsvWriter::new(&mut file).finish(&mut df).unwrap();
     info!("File written successfully into {}", write_path);
 }
-
-// Temporary Code
-    // let schema = Schema::new(vec![
-    //     Field::new("Pregnancies", DataType::Int32, false),
-    //     Field::new("Glucose", DataType::Int32, false),
-    //     Field::new("BloodPressure", DataType::Int32, false),
-    //     Field::new("SkinThickness", DataType::Int32, false),
-    //     Field::new("Insulin", DataType::Int32, false),
-    //     Field::new("BMI", DataType::Float32, false),
-    //     Field::new("DiabetesPedigreeFunction", DataType::Float32, false),
-    //     Field::new("Age", DataType::Int32, false),
-    //     Field::new("Outcome", DataType::Int8, false),
-    // ]);
-    // let csv_read_optoins = CsvReadOptions{schema: Some(&schema), ..Default::default()};
-    // let ctx = SessionContext::new();
-    // let df = ctx.read_csv(path.to_string(), csv_read_optoins).await.unwrap();
-    // info!("File read successfully into {}", path);
-    // df
