@@ -12,4 +12,4 @@ stages:
       - data/raw/diabetes.csv
       - target/release/preprocess
     outs:
-      - data/processed/diabetes.csv
+      - data/interim/diabetes.csv

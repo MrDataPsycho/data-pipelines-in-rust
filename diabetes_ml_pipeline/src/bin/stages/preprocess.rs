@@ -79,7 +79,7 @@ fn apply_imputation(df: DataFrame) -> DataFrame {
 }
 
 fn run_pipeline(df: DataFrame) {
-    let write_path = "data/processed/diabetes.csv";
+    let write_path = "data/interim/diabetes.csv";
     let mut file = std::fs::File::create(write_path).unwrap();
     info!("Row count before processing. {:?}", df.shape());
     let df = select_relevant_columns(df);
