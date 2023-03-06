@@ -13,6 +13,7 @@ linfa = "0.6.1"
 linfa-logistic = "0.6.1"
 csv = "1.2.0"
 ndarray = "0.15.6"
+ciborium = "0.2.0"
 
 
 [[bin]]
