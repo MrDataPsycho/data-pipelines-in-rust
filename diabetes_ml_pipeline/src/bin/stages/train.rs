@@ -14,7 +14,7 @@ use std::{fs, fs::File};
 fn main() {
     env_logger::init();
     train();
-    // load_model();
+    load_model();
 }
 
 fn get_dataset() -> Dataset<f32, i32, ndarray::Dim<[usize; 1]>> {
@@ -112,7 +112,8 @@ fn load_model() {
     let mut file = File::open(&path).unwrap();
     file.read_to_end(&mut data).unwrap();
     let model_value = ciborium::de::from_reader::<value::Value, _>(&data[..]).unwrap();
-    let model: FittedLogisticRegression<f32, bool> = model_value.deserialized().unwrap();
-    model.predict(dataset.records);
-    info!("Model loading was also successful!")
+    let model: FittedLogisticRegression<f32, i32> = model_value.deserialized().unwrap();
+    info!("Model loading was also successful!");
+    let _ = model.predict(dataset.records);
+    info!("Step Prediction test with the model was successful!")
 }
