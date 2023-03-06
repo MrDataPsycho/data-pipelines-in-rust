@@ -2,13 +2,14 @@ use csv::Reader;
 use std::{fs::File};
 use ndarray::{Array, Array1, Array2};
 use linfa::Dataset;
+use linfa::prelude::*;
+use linfa_logistic::LogisticRegression;
 use log::info;
 use env_logger;
 
 fn main() {
     env_logger::init();
-    let dataset = get_dataset();
-    println!("{:?}", dataset);
+    train();
 }
 
 
@@ -67,4 +68,15 @@ fn get_data(reader: &mut Reader<File>) -> Vec<Vec<f32>> {
         .collect::<Vec<Vec<f32>>>();
     info!("Step: Data collected successfully with record length {:?}", result.len());
     result
+}
+
+fn train () {
+    let dataset = get_dataset();
+    let model = LogisticRegression::default()
+    .max_iterations(500)
+    .gradient_tolerance(0.0001)
+    .fit(&dataset)
+    .expect("Can not train the model");
+    let prediction = model.predict(&dataset.records);
+    println!("{:?}", prediction);
 }
