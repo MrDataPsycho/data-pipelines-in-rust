@@ -1,26 +1,41 @@
-use ciborium::value;
-use linfa_logistic::FittedLogisticRegression;
-use std::path::Path;
-use std::fs::File;
-use std::io::Read;
-use log::info;
+use lambda_runtime::{service_fn, Error, LambdaEvent};
+use serde::{Deserialize, Serialize};
 
-fn main() {
-    let _ = run_prediction_pipeline();
+
+#[derive(Deserialize)]
+struct Request {
+    command: String,
 }
 
-fn run_prediction_pipeline() {
-    let _model: FittedLogisticRegression<f32, i32>  = load_model();
+#[derive(Serialize)]
+struct Response {
+    req_id: String,
+    msg: String,
 }
 
+#[tokio::main]
+async fn main() -> Result<(), Error> {
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::INFO)
+        // disabling time is handy because CloudWatch will add the ingestion time.
+        .without_time()
+        .init();
 
-fn load_model()  -> FittedLogisticRegression<f32, i32> {
-    let mut data: Vec<u8> = Vec::new();
-    let path = Path::new("model").join("model.cbor");
-    let mut file = File::open(&path).unwrap();
-    file.read_to_end(&mut data).unwrap();
-    let model_value = ciborium::de::from_reader::<value::Value, _>(&data[..]).unwrap();
-    let model: FittedLogisticRegression<f32, i32> = model_value.deserialized().unwrap();
-    info!("Model loading was also successful!");
-    model
+    let func = service_fn(my_handler);
+    lambda_runtime::run(func).await?;
+    Ok(())
+}
+
+pub(crate) async fn my_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
+    // extract some useful info from the request
+    let command = event.payload.command;
+
+    // prepare the response
+    let resp = Response {
+        req_id: event.context.request_id,
+        msg: format!("Command {} executed.", command),
+    };
+
+    // return `Response` (it will be serialized to JSON automatically by the runtime)
+    Ok(resp)
 }
